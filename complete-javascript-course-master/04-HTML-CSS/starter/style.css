@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(224, 211, 173);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    padding: 50px;
+}
+
+h1 {
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+h2 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 25px;
+}
+
+.first {
+    color: rgb(182, 1, 1);
+}
+
+#your-name {
+    background-color: rgb(230, 157, 0);
+    border: 3px solid #444;
+    width: 400px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+input,
+button {
+    padding: 10px;
+    font-size: 15px;
+}
+
+#course-image {
+    width: 300px;
+}
+
+#your-name h2 {
+    color: olivedrab;
+}
