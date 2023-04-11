@@ -284,3 +284,19 @@ btnSort.addEventListener('click', function (e) {
 // //Output is a string
 // console.log((2.7).toFixed(0));
 // console.log((2.7).toFixed(3));
+
+/* Remainder Operator */
+// console.log(5 % 2);
+// console.log(8 % 3);
+
+// const isEven = n => n % 2 === 0;
+// console.log(isEven(133.9));
+
+// labelBalance.addEventListener('click', function () {
+//     [...document.querySelectorAll('.movements__row')].forEach(function (
+//         row,
+//         i
+//     ) {
+//         if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+//     });
+// });
