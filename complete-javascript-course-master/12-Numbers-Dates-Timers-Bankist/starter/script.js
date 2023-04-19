@@ -304,3 +304,21 @@ btnSort.addEventListener('click', function (e) {
 /* Numeric Separator */
 // const diameter = 287_460_000_000;
 // console.log(diameter);
+
+/* Working with Bigint */
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+
+//This is result in a wrong output
+console.log(2 ** 53 - 1 + 2);
+
+//n transforms a regular number into a bigint
+console.log(456513549873543135137987981353135n);
+
+//operations
+console.log(10000n + 10000n);
+console.log(456513549873543135137987981353135n * 10000n);
+
+console.log(20n == 20);
+console.log(20n === 20);
+console.log(typeof 20n);
