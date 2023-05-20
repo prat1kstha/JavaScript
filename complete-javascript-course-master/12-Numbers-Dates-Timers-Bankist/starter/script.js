@@ -81,19 +81,29 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = '';
 
-    const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+    const movs = sort
+        ? acc.movements.slice().sort((a, b) => a - b)
+        : acc.movements;
 
     movs.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+        const date = new Date(acc.movementsDates[i]);
+
+        const year = date.getFullYear();
+        const month = `${date.getMonth() + 1}`.padStart(2, 0);
+        const day = `${date.getDate()}`.padStart(2, 0);
+        const displayDate = `${day}/${month}/${year}`;
 
         const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
             i + 1
         } ${type}</div>
+        <div class="movementrs__date">${displayDate}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +152,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
     // Display movements
-    displayMovements(acc.movements);
+    displayMovements(acc);
 
     // Display balance
     calcDisplayBalance(acc);
@@ -154,6 +164,11 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+
+//FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(account1);
+// containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
     // Prevent form from submitting
@@ -170,6 +185,15 @@ btnLogin.addEventListener('click', function (e) {
             currentAccount.owner.split(' ')[0]
         }`;
         containerApp.style.opacity = 100;
+
+        //Create current date time
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = `${now.getMonth() + 1}`.padStart(2, 0);
+        const date = `${now.getDate()}`.padStart(2, 0);
+        const hour = `${now.getHours()}`.padStart(2, 0);
+        const min = `${now.getMinutes()}`.padStart(2, 0);
+        labelDate.textContent = `${date}/${month}/${year}, ${hour}:${min}`;
 
         // Clear input fields
         inputLoginUsername.value = inputLoginPin.value = '';
@@ -198,6 +222,10 @@ btnTransfer.addEventListener('click', function (e) {
         currentAccount.movements.push(-amount);
         receiverAcc.movements.push(amount);
 
+        // Add Transfer Dates
+        currentAccount.movementsDates.push(new Date().toISOString());
+        receiverAcc.movementsDates.push(new Date().toISOString());
+
         // Update UI
         updateUI(currentAccount);
     }
@@ -214,6 +242,7 @@ btnLoan.addEventListener('click', function (e) {
     ) {
         // Add movement
         currentAccount.movements.push(amount);
+        currentAccount.movementsDates.push(new Date().toISOString());
 
         // Update UI
         updateUI(currentAccount);
@@ -247,7 +276,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
     e.preventDefault();
-    displayMovements(currentAccount.movements, !sorted);
+    displayMovements(currentAccount, !sorted);
     sorted = !sorted;
 });
 
@@ -301,24 +330,52 @@ btnSort.addEventListener('click', function (e) {
 //     });
 // });
 
-/* Numeric Separator */
+// /* Numeric Separator */
 // const diameter = 287_460_000_000;
 // console.log(diameter);
 
 /* Working with Bigint */
-console.log(2 ** 53 - 1);
-console.log(Number.MAX_SAFE_INTEGER);
+// console.log(2 ** 53 - 1);
+// console.log(Number.MAX_SAFE_INTEGER);
 
-//This is result in a wrong output
-console.log(2 ** 53 - 1 + 2);
+// //This is result in a wrong output
+// console.log(2 ** 53 - 1 + 2);
 
-//n transforms a regular number into a bigint
-console.log(456513549873543135137987981353135n);
+// //n transforms a regular number into a bigint
+// console.log(456513549873543135137987981353135n);
 
-//operations
-console.log(10000n + 10000n);
-console.log(456513549873543135137987981353135n * 10000n);
+// //operations
+// console.log(10000n + 10000n);
+// console.log(456513549873543135137987981353135n * 10000n);
 
-console.log(20n == 20);
-console.log(20n === 20);
-console.log(typeof 20n);
+// console.log(20n == 20);
+// console.log(20n === 20);
+// console.log(typeof 20n);
+
+/* Creating Dates */
+// const now = new Date();
+// console.log(now);
+
+// console.log(new Date('Dec 25, 2023'));
+// console.log(new Date(account1.movementsDates[0]));
+
+// console.log(new Date(2023, 5, 30, 7, 41, 0));
+
+//Date from Unix Date
+// console.log(new Date(3 * 24 * 60 * 60 * 1000));
+
+// /* Working with Dates */
+// const future = new Date(2023, 6, 12, 19, 15, 23);
+// console.log(future);
+// console.log(future.getFullYear());
+// console.log(future.getMonth());
+// console.log(future.getDay());
+// console.log(future.getMinutes());
+// console.log(future.getSeconds());
+// console.log(future.toISOString());
+// console.log(future.getTime());
+
+// console.log(new Date(1689168623000));
+
+// future.setFullYear('2024');
+// console.log(future);
