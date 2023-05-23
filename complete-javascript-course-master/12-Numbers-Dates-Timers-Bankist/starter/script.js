@@ -93,6 +93,13 @@ const formatMovementDate = function (date, locale) {
     return Intl.DateTimeFormat(locale).format(date);
 };
 
+const formatMovementCurrency = function (value, locale, currency) {
+    return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency,
+    }).format(value);
+};
+
 const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = '';
 
@@ -106,13 +113,19 @@ const displayMovements = function (acc, sort = false) {
         const date = new Date(acc.movementsDates[i]);
         const displayDate = formatMovementDate(date, acc.locale);
 
+        const formattedMovement = formatMovementCurrency(
+            mov,
+            acc.locale,
+            acc.currency
+        );
+
         const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
             i + 1
         } ${type}</div>
         <div class="movementrs__date">${displayDate}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMovement}</div>
       </div>
     `;
 
@@ -122,19 +135,32 @@ const displayMovements = function (acc, sort = false) {
 
 const calcDisplayBalance = function (acc) {
     acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-    labelBalance.textContent = `${acc.balance}€`;
+
+    labelBalance.textContent = formatMovementCurrency(
+        acc.balance,
+        acc.locale,
+        acc.currency
+    );
 };
 
 const calcDisplaySummary = function (acc) {
     const incomes = acc.movements
         .filter(mov => mov > 0)
         .reduce((acc, mov) => acc + mov, 0);
-    labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+    labelSumIn.textContent = formatMovementCurrency(
+        incomes,
+        acc.locale,
+        acc.currency
+    );
 
     const out = acc.movements
         .filter(mov => mov < 0)
         .reduce((acc, mov) => acc + mov, 0);
-    labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+    labelSumOut.textContent = formatMovementCurrency(
+        Math.abs(out),
+        acc.locale,
+        acc.currency
+    );
 
     const interest = acc.movements
         .filter(mov => mov > 0)
@@ -144,7 +170,11 @@ const calcDisplaySummary = function (acc) {
             return int >= 1;
         })
         .reduce((acc, int) => acc + int, 0);
-    labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+    labelSumInterest.textContent = formatMovementCurrency(
+        interest,
+        acc.locale,
+        acc.currency
+    );
 };
 
 const createUsernames = function (accs) {
@@ -410,3 +440,43 @@ btnSort.addEventListener('click', function (e) {
 // const calcDaysPassed = (date1, date2) =>
 //     (date2 - date1) / (1000 * 60 * 60 * 24);
 // console.log(calcDaysPassed(new Date(2023, 6, 12), new Date(2023, 6, 24)));
+
+// /* Internationalizing Numbers */
+// const num = 3884764.23;
+// const unitOptions = {
+//     style: 'unit',
+//     unit: 'mile-per-hour',
+// };
+
+// const currencyOptions = {
+//     style: 'currency',
+//     currency: 'EUR',
+// };
+
+// console.log('US: ', new Intl.NumberFormat('en-US', unitOptions).format(num));
+// console.log(
+//     'Germany: ',
+//     new Intl.NumberFormat('de-DE', unitOptions).format(num)
+// );
+// console.log('India: ', new Intl.NumberFormat('hi-IN', unitOptions).format(num));
+// console.log(
+//     'Browser: ',
+//     new Intl.NumberFormat(navigator.language, unitOptions).format(num)
+// );
+
+// console.log(
+//     'US: ',
+//     new Intl.NumberFormat('en-US', currencyOptions).format(num)
+// );
+// console.log(
+//     'Germany: ',
+//     new Intl.NumberFormat('de-DE', currencyOptions).format(num)
+// );
+// console.log(
+//     'India: ',
+//     new Intl.NumberFormat('hi-IN', currencyOptions).format(num)
+// );
+// console.log(
+//     'Browser: ',
+//     new Intl.NumberFormat(navigator.language, currencyOptions).format(num)
+// );
